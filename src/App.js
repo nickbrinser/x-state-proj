@@ -1,33 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useMachine } from "@xstate/react";
 import { redditMachine } from "./redditMachine";
 import { SubReddit } from "./SubReddit";
+import { useSubreddits } from "./effects/useSubreddits";
 
 import "./App.scss";
-
-async function fetchSubreddits() {
-  return fetch("https://api.reddit.com/subreddits").then((response) =>
-    response
-      .json()
-      .then((json) =>
-        json.data.children.map((child) => child.data.display_name)
-      )
-  );
-}
 
 const App = () => {
   const [current, send] = useMachine(redditMachine);
   const { subreddit } = current.context;
-  const [subreddits, setSubreddits] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetchSubreddits();
-      console.log(response);
-      setSubreddits(response);
-    };
-    fetchData();
-  }, []);
-
+  const [subreddits] = useSubreddits();
   return (
     <main
       data-machine={redditMachine.id}

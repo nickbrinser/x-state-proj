@@ -18,7 +18,6 @@ export const SubReddit = ({ service }) => {
   }
 
   const { subreddit, posts, lastUpdated } = current.context;
-  console.log(posts);
   return (
     <section
       data-machine={service.machine.id}
